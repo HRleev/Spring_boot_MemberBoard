@@ -31,8 +31,8 @@ public class BoardEntity extends BaseEntity{
 
 
 //    게시글 작성자 회원아이디 참조
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    private MemberEntity memberEntity;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "memberId")
+//    private MemberEntity memberEntity;
 
 }

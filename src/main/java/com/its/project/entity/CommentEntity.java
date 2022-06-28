@@ -15,10 +15,10 @@ public class CommentEntity extends BaseEntity {
     @Column(name = "commentWriter")
     private String commentWriter;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    private MemberEntity memberEntity;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "memberId")
+//    private MemberEntity memberEntity;
 //
 //
 //    @ManyToOne(fetch = FetchType.LAZY)

@@ -6,6 +6,7 @@ import com.its.project.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -52,6 +53,22 @@ public class MemberController {
             return "memberPages/login";
         }
     }
-
+    @GetMapping("/logout")
+    public String logout (HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
+    @GetMapping("/update")
+    public String updateForm(HttpSession session, Model model){
+        Long id=(Long)session.getAttribute("id");
+        MemberDTO memberDTO=memberService.findById(id);
+        model.addAttribute("updateMember",memberDTO);
+        return "memberPages/update";
+    }
+//    @PostMapping("/update")
+//    public String update(@ModelAttribute MemberDTO memberDTO){
+//        memberService.update(memberDTO);
+//        return "redirect:/member/"+memberDTO.getId();
+//    }
 
 }

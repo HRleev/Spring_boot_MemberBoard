@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+</head>
+<body>
+<form action="/member/update" method="post" name="updateForm">
+    <input type="hidden" th:value="${updateMember.id}" name="id"><br>
+    <input type="text" name="memberEmail" th:value="${updateMember.memberEmail}" placeholder="계정" readonly><br>
+    <input type="text" name="memberPassword" id="memberPassword" placeholder="비밀번호" ><br>
+    <input type="text" name="memberName" th:value="${updateMember.memberName}" placeholder="이름" readonly><br>
+    <input type="text" name="memberMobile" id="memberMobile" th:value="${updateMember.memberMobile}"
+           placeholder="전화번호"><br>
+    <input type="button" th:onclick="update()" value="정보수정">
+    <input type="button" th:onclick="updateByAjax()" value="정보수정(put)">
+</form>
+</body>
+<script>
+    function update(){
+        const pw= [[${updateMember.memberPassword}]];
+        const pwCheck=document.getElementById("memberPassword").value;
+        if(pw==pwCheck){
+            updateForm.submit();
+        }else {
+            alert("놉");
+        }
+    }
+</script>
+</html>
