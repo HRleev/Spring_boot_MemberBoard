@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>save</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+</head>
+<body>
+<form action="/member/save" method="post" ENCTYPE="multipart/form-data">
+    <input type="text" name="memberEmail" placeholder="계정" id="memberEmail" onblur="DuplicateCheck()"><br>
+    <div id="dup-result"></div>
+    <input type="text" name="memberPassword" placeholder="비밀번호"><br>
+    <input type="text" name="memberName" placeholder="이름"><br>
+    <input type="text" name="memberMobile" placeholder="전화번호"><br>
+    <input type="file" name="memberProfile"><br>
+    <input type="submit" value="회원가입">
+</form>
+</body>
+<script th:inline="javascript">
+    const DuplicateCheck = () => {
+        const memberEmail = document.getElementById("memberEmail").value;
+        const checkResult = document.getElementById("dup-result");
+
+        $.ajax({
+            type: "post",
+            url: "/member/duplicateCheck",
+            data: {"memberEmail": memberEmail},
+            dataType: "text",
+            success: function (result) {
+                if (result === "ok") {
+                    checkResult.innerHTML = "사용 가능한 아이디 입니다.";
+                    checkResult.style.color = "green";
+                } else {
+                    checkResult.innerHTML = "이미 사용중인 아이디 입니다.";
+                    checkResult.style.color = "red";
+                }
+            }
+        });
+    }
+</script>
+</html>
