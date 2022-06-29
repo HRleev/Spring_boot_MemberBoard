@@ -10,6 +10,13 @@
 </head>
 <body>
 <a href="/board/save">글작성</a>
+<a href="/member/logout">로그아웃</a>
+<div th:if="${session.memberEmail.toString().equals('admin')}">
+    <a href="/member/admin">관리자모드</a>
+</div>
+<div th:if="${session.memberEmail != null}">
+    <a href="/member/myPage">myPage</a>
+</div>
 <table class="table table-hover">
     <thead>
     <tr>

@@ -82,4 +82,17 @@ public class BoardService {
             return null;
         }
     }
+
+    public void update(BoardDTO boardDTO) {
+        Optional<MemberEntity>optionalMemberEntity=
+                memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
+        if(optionalMemberEntity.isPresent()){
+            MemberEntity memberEntity=optionalMemberEntity.get();
+        boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
+        }
+    }
+
+    public void delete(Long id) {
+        boardRepository.deleteById(id);
+    }
 }

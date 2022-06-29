@@ -12,8 +12,8 @@
     <input type="text" name="memberName" th:value="${updateMember.memberName}" placeholder="이름" readonly><br>
     <input type="text" name="memberMobile" id="memberMobile" th:value="${updateMember.memberMobile}"
            placeholder="전화번호"><br>
-    <input type="button" th:onclick="update()" value="정보수정">
-    <input type="button" th:onclick="updateByAjax()" value="정보수정(put)">
+    <input type="hidden" name="memberFileName" th:value="${updateMember.memberProfileName}">
+    <input type="submit" value="정보수정">
 </form>
 </body>
 <script>

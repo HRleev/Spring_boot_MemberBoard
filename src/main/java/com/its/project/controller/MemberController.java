@@ -5,12 +5,15 @@ import com.its.project.entity.MemberEntity;
 import com.its.project.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,6 +61,21 @@ public class MemberController {
         session.invalidate();
         return "redirect:/";
     }
+    @GetMapping("/admin")
+    public String admin(){
+        return "memberPages/admin";
+    }
+
+    @GetMapping("/list")
+    public String findAll(Model model){
+        List<MemberDTO> memberDTOList=memberService.findAll();
+        model.addAttribute("memberList",memberDTOList);
+        return "/memberPages/list";
+    }
+    @GetMapping("/myPage")
+    public String myPage(){
+        return "memberPages/myPage";
+    }
     @GetMapping("/update")
     public String updateForm(HttpSession session, Model model){
         Long id=(Long)session.getAttribute("id");
@@ -65,10 +83,22 @@ public class MemberController {
         model.addAttribute("updateMember",memberDTO);
         return "memberPages/update";
     }
-//    @PostMapping("/update")
-//    public String update(@ModelAttribute MemberDTO memberDTO){
-//        memberService.update(memberDTO);
-//        return "redirect:/member/"+memberDTO.getId();
-//    }
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO){
+        memberService.update(memberDTO);
+        System.out.println("MemberController.update");
+        System.out.println(memberDTO.getId());
+        return "redirect:/board/";
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        memberService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/")
+    public String member(){
+        return "redirect:/member/list";
+    }
 
 }
