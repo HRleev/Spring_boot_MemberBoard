@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -25,14 +26,6 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-//    public List<BoardDTO> findAll() {
-//      List<BoardEntity> boardEntityList= boardRepository.findAll();
-//      List<BoardDTO>boardDTOList=new ArrayList<>();
-//      for(BoardEntity board: boardEntityList){
-//          BoardDTO boardDTO=BoardDTO.toDTO(board);
-//          boardDTOList.add(boardDTO);
-//      }return boardDTOList;
-//    }
 
     public Page<BoardDTO> paging(Pageable pageable) {
         int page = pageable.getPageNumber();//요청페이지값을 가져옴
@@ -56,6 +49,7 @@ public class BoardService {
     }
 
     public Long save(BoardDTO boardDTO) throws IOException {
+        System.out.println("BoardService.save");
         MultipartFile boardFile =boardDTO.getBoardFile();
         String boardFileName=boardFile.getOriginalFilename();
         boardFileName =System.currentTimeMillis()+"_"+boardFileName;
@@ -75,5 +69,17 @@ public class BoardService {
             return null;
         }
 
+    }
+
+    @Transactional
+    public BoardDTO findById(Long id) {
+        boardRepository.boardHits(id);
+        Optional<BoardEntity>optionalBoardEntity=boardRepository.findById(id);
+        if(optionalBoardEntity.isPresent()){
+            BoardEntity boardEntity=optionalBoardEntity.get();
+            return BoardDTO.toDTO(boardEntity);
+        }else{
+            return null;
+        }
     }
 }

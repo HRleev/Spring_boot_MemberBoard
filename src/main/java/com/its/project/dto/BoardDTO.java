@@ -21,14 +21,6 @@ public class BoardDTO {
     private MultipartFile boardFile;
     private String boardFileName;
 
-    public BoardDTO(String boardTitle, String boardWriter, String boardContents, int boardHits, MultipartFile boardFile, String boardFileName) {
-        this.boardTitle = boardTitle;
-        this.boardWriter = boardWriter;
-        this.boardContents = boardContents;
-        this.boardHits = boardHits;
-        this.boardFile = boardFile;
-        this.boardFileName = boardFileName;
-    }
 
     public BoardDTO(Long id, String boardTitle, String boardWriter, int boardHits, LocalDateTime boardCreatedDate) {
         this.id = id;
@@ -37,15 +29,6 @@ public class BoardDTO {
         this.boardHits = boardHits;
         this.boardCreatedDate = boardCreatedDate;
     }
-
-    public BoardDTO(String boardTitle, String boardWriter, String boardContents, int boardHits) {
-        this.boardTitle=boardTitle;
-        this.boardWriter=boardWriter;
-        this.boardContents=boardContents;
-        this.boardHits = boardHits;
-
-    }
-
 
     public static BoardDTO toDTO(BoardEntity boardEntity) {
         BoardDTO boardDTO=new BoardDTO();

@@ -19,19 +19,13 @@ public class MemberDTO {
     private MultipartFile memberProfile;
     private String memberProfileName;
 
-    public MemberDTO(String memberEmail, String memberPassword, String memberName,  String memberMobile, MultipartFile memberProfile, String memberProfileName) {
+    public MemberDTO(String memberEmail, String memberPassword, String memberName, String memberMobile, MultipartFile memberProfile, String memberProfileName) {
         this.memberEmail = memberEmail;
         this.memberPassword = memberPassword;
         this.memberName = memberName;
         this.memberMobile = memberMobile;
         this.memberProfile = memberProfile;
         this.memberProfileName = memberProfileName;
-    }
-
-    public MemberDTO(String memberEmail, String memberPassword, String memberName) {
-        this.memberEmail = memberEmail;
-        this.memberPassword = memberPassword;
-        this.memberName = memberName;
     }
 
     public static MemberDTO toDTO(MemberEntity memberEntity) {

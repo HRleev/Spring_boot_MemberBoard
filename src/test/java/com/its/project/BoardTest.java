@@ -32,34 +32,34 @@ public class BoardTest {
 
 
 
-    @Test
-    @Transactional
-    @Rollback(value = true)
-    public BoardDTO newBoard(int i) {
-        BoardDTO board = new BoardDTO( "boardTitle" + i, "boardWriter" + i,"boardContents" + i,1+i);
-        return board;
-    }
-
-
-    @Test
-    @Transactional
-    @Rollback(value = true)
-    public void newMember() {
-        MemberDTO memberDTO = new MemberDTO("email1", "pw1", "name1");
-        memberRepository.save(MemberEntity.toSaveEntity(memberDTO));
-    }
-
-
-    @Test
-    @Transactional
-    @Rollback
-    @DisplayName("게시글 저장 테스트")
-    public void memberBoardSaveTest(){
-        BoardDTO boardDTO=newBoard(10);
-        MemberEntity memberEntity= memberRepository.findByMemberEmail("boardWriter").get();
-        BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO,memberEntity);
-        boardRepository.save(boardEntity);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback(value = true)
+//    public BoardDTO newBoard(int i) {
+//        BoardDTO board = new BoardDTO( "boardTitle" + i, "boardWriter" + i,"boardContents" + i,1+i);
+//        return board;
+//    }
+//
+//
+//    @Test
+//    @Transactional
+//    @Rollback(value = true)
+//    public void newMember() {
+//        MemberDTO memberDTO = new MemberDTO("email1", "pw1", "name1");
+//        memberRepository.save(MemberEntity.toSaveEntity(memberDTO));
+//    }
+//
+//
+//    @Test
+//    @Transactional
+//    @Rollback
+//    @DisplayName("게시글 저장 테스트")
+//    public void memberBoardSaveTest(){
+//        BoardDTO boardDTO=newBoard(10);
+//        MemberEntity memberEntity= memberRepository.findByMemberEmail("boardWriter").get();
+//        BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO,memberEntity);
+//        boardRepository.save(boardEntity);
+//    }
 
 
 }

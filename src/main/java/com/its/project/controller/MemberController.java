@@ -48,7 +48,7 @@ public class MemberController {
         if(loginResult!=null){
             session.setAttribute("id",loginResult.getId());
             session.setAttribute("memberEmail",loginResult.getMemberEmail());
-            return "redirect:/board/list";
+            return "redirect:/board/";
         }else{
             return "memberPages/login";
         }
