@@ -28,13 +28,17 @@ public class MemberDTO {
         this.memberProfileName = memberProfileName;
     }
 
-    public static MemberDTO toDTO(MemberEntity memberEntity) {
-        MemberDTO memberDTO=new MemberDTO();
+    public static MemberDTO toDTO (MemberEntity memberEntity) {
+        MemberDTO memberDTO = new MemberDTO();
+
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
         memberDTO.setMemberPassword(memberEntity.getMemberPassword());
         memberDTO.setMemberName(memberEntity.getMemberName());
+        memberDTO.setMemberEmail(memberEntity.getMemberEmail());
         memberDTO.setMemberMobile(memberEntity.getMemberMobile());
+        memberDTO.setMemberProfileName(memberEntity.getMemberProfileName());
+
         return memberDTO;
     }
 }

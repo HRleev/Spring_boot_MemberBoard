@@ -10,7 +10,7 @@ public class WebConfig  implements WebMvcConfigurer {
     private String resourcePath="file:///D:/springboot_img/";
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry){
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(connectPath)
                 .addResourceLocations(resourcePath);
     }

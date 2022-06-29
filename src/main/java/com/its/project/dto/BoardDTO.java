@@ -22,23 +22,35 @@ public class BoardDTO {
     private String boardFileName;
 
 
-    public BoardDTO(Long id, String boardTitle, String boardWriter, int boardHits, LocalDateTime boardCreatedDate) {
-        this.id = id;
-        this.boardTitle = boardTitle;
+    public BoardDTO(String boardWriter, String boardTitle, String boardContents, int boardHits, LocalDateTime boardCreatedDate) {
         this.boardWriter = boardWriter;
+        this.boardTitle = boardTitle;
+        this.boardContents = boardContents;
         this.boardHits = boardHits;
         this.boardCreatedDate = boardCreatedDate;
     }
 
+    public BoardDTO(Long id, String boardTitle, String boardContents, String boardWriter, int boardHits, LocalDateTime createdTime, String boardFileName) {
+        this.id = id;
+        this.boardWriter = boardWriter;
+        this.boardTitle = boardTitle;
+        this.boardContents = boardContents;
+        this.boardHits = boardHits;
+        this.boardCreatedDate = createdTime;
+        this.boardFileName = boardFileName;
+    }
+
     public static BoardDTO toDTO(BoardEntity boardEntity) {
-        BoardDTO boardDTO=new BoardDTO();
+        BoardDTO boardDTO = new BoardDTO();
+
         boardDTO.setId(boardEntity.getId());
-        boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardWriter(boardEntity.getBoardWriter());
+        boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardContents(boardEntity.getBoardContents());
         boardDTO.setBoardHits(boardEntity.getBoardHits());
         boardDTO.setBoardCreatedDate(boardEntity.getCreatedTime());
         boardDTO.setBoardFileName(boardEntity.getBoardFileName());
+
         return boardDTO;
     }
 }

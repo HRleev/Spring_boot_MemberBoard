@@ -1,8 +1,10 @@
 package com.its.project.controller;
 
 import com.its.project.dto.BoardDTO;
+import com.its.project.dto.CommentDTO;
 import com.its.project.service.BoardService;
 import com.its.project.common.PagingConst;
+import com.its.project.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -48,6 +51,8 @@ public class BoardController {
     public String findById(@PathVariable Long id, Model model) {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
+        List<CommentDTO> commentDTOList = commentService.findAll();
+        model.addAttribute("commentList", commentDTOList);
         return "/boardPages/detail";
     }
     @GetMapping("/update/{id}")
@@ -58,7 +63,7 @@ public class BoardController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute BoardDTO boardDTO){
+    public String update(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.update(boardDTO);
         System.out.println("BoardController.update");
         System.out.println("boardDTO = " + boardDTO);
@@ -69,6 +74,9 @@ public class BoardController {
         boardService.delete(id);
         return "redirect:/board/";
     }
-
+    @GetMapping("/search")
+    public @ResponseBody List<BoardDTO> search(@RequestParam("q") String q) {
+        return boardService.search(q);
+    }
 
 }

@@ -10,7 +10,41 @@
     제목: <input type="text" name="boardTitle" th:value="${board.boardTitle}"><br>
     작성자: <input type="text" name="boardWriter" th:value="${board.boardWriter}" th:placeholder="${session.memberEmail}" readonly><br>
     내용: <input type="text" name="boardContents" ><br>
+    파일 : <input type="file" name="boardFile" th:value="${board.boardFileName}"><br/>
+    <input type="hidden" name="createdTime" th:value="${board.boardCreatedDate}" readonly>
+    <input type="hidden" name="boardHits" th:value="${board.boardHits}" readonly>
     <input type="submit" value="수정">
 </form>
+<form action="/comment/save" method="post">
+    <input type="hidden" name="boardId" th:value="${board.id}">
+    작성자 : <input type="text" name="commentWriter" th:value="${session.loginId}" readonly><br/>
+    댓글내용 : <input type="text" name="commentContents"><br/>
+    <button type="submit">작성하기</button><br/>
+</form>
+<table>
+    <thead>
+    <tr>
+        <td>id</td>
+        <td>commentWriter</td>
+        <td>commentContents</td>
+        <td>commentCreatedTime</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${commentList}">
+        <td th:text="${comment.id}"></td>
+        <td th:text="${comment.commentWriter}"></td>
+        <td th:text="${comment.commentContents}"></td>
+        <td th:text="*{#temporals.format(comment.getCommentCreatedTime(), 'yyyy-MM-dd HH:mm')}"></td>
+        <td><button type="button" th:onclick="deleteComment([[${comment.id}]])">삭제</button></td>
+    </tr>
+    </tbody>
+</table>
 </body>
+<script>
+    const deleteComment = (id) => {
+        location.href = '/comment/delete/' + id;
+    }
+</script>
 </html>

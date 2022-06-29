@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -31,24 +33,30 @@ public class BoardEntity extends BaseEntity{
     private String boardFileName;
 
 
-//    게시글 작성자 회원아이디 참조
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private MemberEntity memberEntity;
 
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
+
     public static BoardEntity toSaveEntity(BoardDTO boardDTO, MemberEntity memberEntity) {
-        BoardEntity boardEntity=new BoardEntity();
+        BoardEntity boardEntity = new BoardEntity();
+
         boardEntity.setBoardWriter(memberEntity.getMemberEmail());
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(boardDTO.getBoardHits());
         boardEntity.setBoardFileName(boardDTO.getBoardFileName());
         boardEntity.setMemberEntity(memberEntity);
+
         return boardEntity;
     }
 
-    public static BoardEntity toUpdateEntity(BoardDTO boardDTO,MemberEntity memberEntity) {
-        BoardEntity boardEntity=new BoardEntity();
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO, MemberEntity memberEntity) {
+        BoardEntity boardEntity = new BoardEntity();
+
         boardEntity.setId(boardDTO.getId());
         boardEntity.setBoardWriter(memberEntity.getMemberEmail());
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
@@ -56,6 +64,7 @@ public class BoardEntity extends BaseEntity{
         boardEntity.setBoardHits(boardDTO.getBoardHits());
         boardEntity.setBoardFileName(boardDTO.getBoardFileName());
         boardEntity.setMemberEntity(memberEntity);
+
         return boardEntity;
     }
 }

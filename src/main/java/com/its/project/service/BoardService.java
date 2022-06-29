@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -41,31 +42,33 @@ public class BoardService {
                 //new BoardDTO()생성자
                 board -> new BoardDTO(board.getId(),
                         board.getBoardTitle(),
+                        board.getBoardContents(),
                         board.getBoardWriter(),
                         board.getBoardHits(),
-                        board.getCreatedTime()
+                        board.getCreatedTime(),
+                        board.getBoardFileName()
                 ));
         return boardList;
     }
 
     public Long save(BoardDTO boardDTO) throws IOException {
         System.out.println("BoardService.save");
-        MultipartFile boardFile =boardDTO.getBoardFile();
-        String boardFileName=boardFile.getOriginalFilename();
-        boardFileName =System.currentTimeMillis()+"_"+boardFileName;
-        String savePath ="D:\\springboot_img\\"+boardFileName;
-        if(!boardFile.isEmpty()){
+        MultipartFile boardFile = boardDTO.getBoardFile();
+        String boardFileName = boardFile.getOriginalFilename();
+        boardFileName = System.currentTimeMillis() + "_" + boardFileName;
+        String savePath = "D:\\springboot_img\\" + boardFileName;
+        if (!boardFile.isEmpty()) {
             boardFile.transferTo(new File(savePath));
         }
         boardDTO.setBoardFileName(boardFileName);
-        Optional<MemberEntity>optionalMemberEntity=
+        Optional<MemberEntity> optionalMemberEntity =
                 memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
-        if(optionalMemberEntity.isPresent()){
-            MemberEntity memberEntity=optionalMemberEntity.get();
-            Long savedId=boardRepository.save(BoardEntity.
-                    toSaveEntity(boardDTO,memberEntity)).getId();
+        if (optionalMemberEntity.isPresent()) {
+            MemberEntity memberEntity = optionalMemberEntity.get();
+            Long savedId = boardRepository.save(BoardEntity.
+                    toSaveEntity(boardDTO, memberEntity)).getId();
             return savedId;
-        }else{
+        } else {
             return null;
         }
 
@@ -74,25 +77,73 @@ public class BoardService {
     @Transactional
     public BoardDTO findById(Long id) {
         boardRepository.boardHits(id);
-        Optional<BoardEntity>optionalBoardEntity=boardRepository.findById(id);
-        if(optionalBoardEntity.isPresent()){
-            BoardEntity boardEntity=optionalBoardEntity.get();
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
+        if (optionalBoardEntity.isPresent()) {
+            BoardEntity boardEntity = optionalBoardEntity.get();
             return BoardDTO.toDTO(boardEntity);
-        }else{
+        } else {
             return null;
         }
     }
 
-    public void update(BoardDTO boardDTO) {
-        Optional<MemberEntity>optionalMemberEntity=
-                memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
-        if(optionalMemberEntity.isPresent()){
-            MemberEntity memberEntity=optionalMemberEntity.get();
-        boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
+    @Transactional
+    public void update(BoardDTO boardDTO) throws IOException {
+        BoardDTO findDTO = findById(boardDTO.getId());
+        MultipartFile boardFile = boardDTO.getBoardFile();
+        String boardFileName = boardFile.getOriginalFilename();
+
+        if (!Objects.equals(findDTO.getBoardFileName(), boardDTO.getBoardFileName())) {
+            if (!boardFile.isEmpty()) {
+                boardFileName = System.currentTimeMillis() + "_" + boardFileName;
+                String savePath = "D:\\springboot_img\\" + boardFileName;
+                boardFile.transferTo(new File(savePath));
+                boardDTO.setBoardFileName(boardFileName);
+            } else {
+                boardDTO.setBoardFileName(null);
+            }
+        } else if (findDTO.getBoardFileName() == null) {
+            if (!boardFile.isEmpty()) {
+                boardFileName = System.currentTimeMillis() + "_" + boardFileName;
+                String savePath = "D:\\springboot_img\\" + boardFileName;
+                boardFile.transferTo(new File(savePath));
+                boardDTO.setBoardFileName(boardFileName);
+            } else {
+                boardDTO.setBoardFileName(null);
+            }
+        }
+
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberId(boardDTO.getBoardWriter());
+        if (optionalMemberEntity.isPresent()) {
+            MemberEntity memberEntity = optionalMemberEntity.get();
+            BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO, memberEntity);
+
+            boardRepository.save(boardEntity);
         }
     }
 
+//    public void update(BoardDTO boardDTO) {
+//        Optional<MemberEntity>optionalMemberEntity=
+//                memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
+//        if(optionalMemberEntity.isPresent()){
+//            MemberEntity memberEntity=optionalMemberEntity.get();
+//        boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
+//        }
+//    }
+
     public void delete(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    public List<BoardDTO> search(String q) {
+        System.out.println("BoardService.search");
+
+        List<BoardEntity> boardEntityList = boardRepository.findByBoardTitleContaining(q);
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+
+        for (BoardEntity boardEntity : boardEntityList) {
+            boardDTOList.add(BoardDTO.toDTO(boardEntity));
+        }
+
+        return boardDTOList;
     }
 }

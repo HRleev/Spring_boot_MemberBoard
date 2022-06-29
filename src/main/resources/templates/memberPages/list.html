@@ -14,6 +14,7 @@
         <th>memberPassword</th>
         <th>memberName</th>
         <th>memberMobile</th>
+        <th>memberProfile</th>
     </tr>
     <tr th:each="member:${memberList}">
         <td th:text="${member.id}"></td>
@@ -21,6 +22,7 @@
         <td th:text="${member.memberEmail}"></td>
         <td th:text="${member.memberName}"></td>
         <td th:text="${member.memberMobile}"></td>
+        <td><img th:src="@{|/upload/${member.memberProfileName}|}" width="50px" height="50px" alt=""></td>
         <td>
             <button th:onclick="deleteById([[${member.id}]])">삭제(ajax)</button>
         </td>
