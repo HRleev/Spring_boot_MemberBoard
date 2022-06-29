@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,9 +35,12 @@ public class MemberEntity {
     @Column(name = "memberProfileName")
     private String memberProfileName;
 
+    @OneToMany(mappedBy = "memberEntity",cascade = CascadeType.PERSIST,orphanRemoval = false,fetch = FetchType.LAZY)
+    private List<BoardEntity> boardEntityList = new ArrayList<>();
+
     public static MemberEntity toEntity(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
-        memberEntity.setId(memberDTO.getId());
+//        memberEntity.setId(memberDTO.getId());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setMemberName(memberDTO.getMemberName());
@@ -45,4 +50,13 @@ public class MemberEntity {
 
 
     }
+    public static MemberEntity toSaveEntity(MemberDTO memberDTO){
+        MemberEntity memberEntity=new MemberEntity();
+        memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
+        memberEntity.setMemberName(memberDTO.getMemberName());
+        return memberEntity;
+        }
+
+
 }

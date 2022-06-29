@@ -28,6 +28,12 @@ public class MemberDTO {
         this.memberProfileName = memberProfileName;
     }
 
+    public MemberDTO(String memberEmail, String memberPassword, String memberName) {
+        this.memberEmail = memberEmail;
+        this.memberPassword = memberPassword;
+        this.memberName = memberName;
+    }
+
     public static MemberDTO toDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO=new MemberDTO();
 

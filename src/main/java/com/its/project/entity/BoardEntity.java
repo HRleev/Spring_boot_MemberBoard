@@ -1,5 +1,6 @@
 package com.its.project.entity;
 
+import com.its.project.dto.BoardDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,8 +32,18 @@ public class BoardEntity extends BaseEntity{
 
 
 //    게시글 작성자 회원아이디 참조
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "memberId")
-//    private MemberEntity memberEntity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    private MemberEntity memberEntity;
 
+    public static BoardEntity toSaveEntity(BoardDTO boardDTO, MemberEntity memberEntity) {
+        BoardEntity boardEntity=new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setBoardWriter(memberEntity.getMemberEmail());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(boardDTO.getBoardHits());
+        boardEntity.setBoardFileName(boardDTO.getBoardFileName());
+        return boardEntity;
+    }
 }
