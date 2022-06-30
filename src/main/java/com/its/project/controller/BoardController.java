@@ -74,5 +74,15 @@ public class BoardController {
         boardService.delete(id);
         return "redirect:/board/";
     }
+    @GetMapping("/search")
+    public String search(@RequestParam("q")String q, Model model){
+        System.out.println("BoardController.search");
+        System.out.println("q = " + q + ", model = " + model);
+        List<BoardDTO>boardList=boardService.search(q);
+        model.addAttribute("boardList",boardList);
+        return "redirect:/board/";
+    }
+
+
 
 }

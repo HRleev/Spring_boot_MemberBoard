@@ -121,18 +121,19 @@ public class BoardService {
         }
     }
 
-//    public void update(BoardDTO boardDTO) {
-//        Optional<MemberEntity>optionalMemberEntity=
-//                memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
-//        if(optionalMemberEntity.isPresent()){
-//            MemberEntity memberEntity=optionalMemberEntity.get();
-//        boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
-//        }
-//    }
-
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
 
 
+    public List<BoardDTO> search(String q) {
+        List<BoardEntity>boardEntityList=boardRepository.findByBoardTitleContaining(q);
+        List<BoardDTO>boarDTOList =new ArrayList<>();
+        for(BoardEntity boardEntity:boardEntityList){
+            boarDTOList.add(BoardDTO.toDTO(boardEntity));
+            System.out.println("BoardService.search");
+            System.out.println("boarDTOList = " + boarDTOList);
+        }return boarDTOList;
+
+    }
 }
