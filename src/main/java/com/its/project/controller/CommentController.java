@@ -15,28 +15,10 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/")
-    public List<CommentDTO> findAll() {
-
-
-        return commentService.findAll();
-    }
-
     @PostMapping("/save")
-    public String save(@ModelAttribute CommentDTO commentDTO) {
-
-
+    public @ResponseBody List<CommentDTO> save(@ModelAttribute CommentDTO commentDTO) {
         commentService.save(commentDTO);
-
-        return "redirect:/board/" + commentDTO.getBoardId();
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        System.out.println("CommentController.delete");
-
-        commentService.delete(id);
-
-        return "redirect:/board/";
+        List<CommentDTO>commentDTOList= commentService.findAll(commentDTO.getCommentBId());
+        return commentDTOList;
     }
 }

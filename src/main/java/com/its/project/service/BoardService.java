@@ -112,7 +112,7 @@ public class BoardService {
             }
         }
 
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberId(boardDTO.getBoardWriter());
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
         if (optionalMemberEntity.isPresent()) {
             MemberEntity memberEntity = optionalMemberEntity.get();
             BoardEntity boardEntity = BoardEntity.toUpdateEntity(boardDTO, memberEntity);
@@ -134,16 +134,5 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    public List<BoardDTO> search(String q) {
-        System.out.println("BoardService.search");
 
-        List<BoardEntity> boardEntityList = boardRepository.findByBoardTitleContaining(q);
-        List<BoardDTO> boardDTOList = new ArrayList<>();
-
-        for (BoardEntity boardEntity : boardEntityList) {
-            boardDTOList.add(BoardDTO.toDTO(boardEntity));
-        }
-
-        return boardDTOList;
-    }
 }

@@ -15,8 +15,8 @@ public class CommentEntity extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "boardId")
-    private Long boardId;
+    @Column(name = "commentBId")
+    private Long commentBId;
 
     @Column(name = "commentWriter")
     private String commentWriter;
@@ -36,6 +36,7 @@ public class CommentEntity extends BaseEntity {
 
     public static CommentEntity toSaveEntity(CommentDTO commentDTO,BoardEntity boardEntity,MemberEntity memberEntity){
         CommentEntity commentEntity=new CommentEntity();
+        commentEntity.setCommentBId(commentDTO.getCommentBId());
         commentEntity.setCommentWriter(memberEntity.getMemberEmail());
         commentEntity.setCommentContents(commentDTO.getCommentContents());
         commentEntity.setBoardEntity(boardEntity);

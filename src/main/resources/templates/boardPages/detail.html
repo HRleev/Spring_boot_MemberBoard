@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <head>
     <meta charset="UTF-8">
@@ -38,8 +38,30 @@
 <!--    <div th:if="${session.memberEmail.toString().equals('admin')}">-->
 <!--        <button type="button" onclick="req(2)">삭제</button>-->
 <!--    </div>-->
-<div id="pwCk"></div>
 
+<div>
+        <input type="text" id="commentWriter"
+               th:value="${session.memberEmail}" readonly><br>
+        <input type="text" id="commentContents"><br>
+        <button onclick="commentUpdate()">리뷰작성</button>
+</div>
+
+<div id="comment-list">
+    <table>
+    <tr>
+        <th>id</th>
+        <th>commentWriter</th>
+        <th>commentContents</th>
+        <th>commentCreatedDate</th>
+    </tr>
+    <tr th:each="comment:${commentList}">
+        <td th:text="${comment.id}"></td>
+        <td th:text="${comment.commentWriter}"></td>
+        <td th:text="${comment.commentContents}"></td>
+        <td th:text="*{#temporals.format(comment.commentCreatedDate, 'yyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    </table>
+</div>
 </body>
 <script th:inline="javascript">
     function req(num) {
@@ -52,5 +74,42 @@
             location.href = "/board/delete/" + id;
         }
     }
+
+    function commentUpdate() {
+        const commentBId=[[${board.id}]];
+        const commentWriter = [[${session.memberEmail}]];
+        const commentContents = document.getElementById("commentContents").value;
+
+        $.ajax({
+            type:"post",
+            url:"/comment/save",
+            data:{
+                "commentBId":commentBId,
+                "commentWriter":commentWriter,
+                "commentContents":commentContents
+            },
+            dataType:"json",
+            success: function (result){
+                let output="<table><tr>";
+                output += "<th>id</th>";
+                output += "<th>commentWriter</th>";
+                output += "<th>commentContents</th>";
+                output += "<th>commentCreatedDate</th></tr>";
+                for(let i in result){
+                    output += "<tr>";
+                    output += "<td>" + result[i].id + "</td>";
+                    output += "<td>" + result[i].commentWriter + "</td>";
+                    output += "<td>" + result[i].commentContents + "</td>";
+                    output += "<td>"+ result[i].commentCreatedDate +"</td></tr>";
+                }
+                output += "</table>";
+                document.getElementById('comment-list').innerHTML=output;
+                document.getElementById('commentContents').value='';
+            }
+        });
+
+    }
+
+
 </script>
 </html>

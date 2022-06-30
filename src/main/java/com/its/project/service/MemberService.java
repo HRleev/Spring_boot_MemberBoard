@@ -28,7 +28,7 @@ public class MemberService {
         if (!memberFile.isEmpty()) {
             memberFile.transferTo(new File(savePath));
             memberDTO.setMemberProfileName((memberFileName));
-            MemberEntity memberEntity = MemberEntity.toEntity(memberDTO);
+            MemberEntity memberEntity = MemberEntity.toSaveEntity(memberDTO);
             return memberRepository.save(memberEntity).getId();
         } else {
             return null;

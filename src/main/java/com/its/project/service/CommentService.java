@@ -20,23 +20,21 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    public List<CommentDTO> findAll() {
-        System.out.println("CommentService.findAll");
 
-        List<CommentEntity> commentEntityList = commentRepository.findAll();
+
+    public List<CommentDTO> findAll(Long commentBId) {
+        List<CommentEntity> commentEntityList = commentRepository.findByCommentBId(commentBId);
         List<CommentDTO> commentDTOList = new ArrayList<>();
-
         for (CommentEntity commentEntity : commentEntityList) {
             commentDTOList.add(CommentDTO.toSaveDTO(commentEntity));
         }
-
         return commentDTOList;
     }
 
     public void save(CommentDTO commentDTO) {
 
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberId(commentDTO.getCommentWriter());
-        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(commentDTO.getId());
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(commentDTO.getCommentWriter());
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(commentDTO.getCommentBId());
 
         if (optionalBoardEntity.isPresent() && optionalMemberEntity.isPresent()) {
             MemberEntity memberEntity = optionalMemberEntity.get();
@@ -46,16 +44,6 @@ public class CommentService {
         }
     }
 
-    public CommentDTO findById(Long id) {
-
-        Optional<CommentEntity> optionalCommentEntity = commentRepository.findById(id);
-        if (optionalCommentEntity.isPresent()) {
-            CommentEntity commentEntity = optionalCommentEntity.get();
-            return CommentDTO.toSaveDTO(commentEntity);
-        } else {
-            return null;
-        }
-    }
 
     public void delete(Long id) {
         commentRepository.deleteById(id);

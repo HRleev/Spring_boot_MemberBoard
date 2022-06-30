@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CommentDTO extends BaseEntity {
     private Long id;
-    private String boardId;
+    private Long commentBId;
     private String commentWriter;
 
     private String commentContents;
     private LocalDateTime commentCreatedDate;
 
-    public CommentDTO(String boardId, String commentWriter,String commentContents, LocalDateTime commentCreatedDate) {
-        this.boardId = boardId;
+    public CommentDTO(Long commentBId, String commentWriter,String commentContents, LocalDateTime commentCreatedDate) {
+        this.commentBId = commentBId;
         this.commentWriter = commentWriter;
         this.commentContents=commentContents;
         this.commentCreatedDate = commentCreatedDate;
@@ -30,6 +30,7 @@ public class CommentDTO extends BaseEntity {
         CommentDTO commentDTO = new CommentDTO();
 
         commentDTO.setId(commentEntity.getId());
+        commentDTO.setCommentBId(commentEntity.getCommentBId());
         commentDTO.setCommentWriter(commentEntity.getCommentWriter());
         commentDTO.setCommentContents(commentEntity.getCommentContents());
         commentDTO.setCommentCreatedDate(commentEntity.getCreatedTime());
